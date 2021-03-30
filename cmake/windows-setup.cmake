@@ -1,21 +1,35 @@
-# Custom build settings for Windows (MSVC)
+# This file contains Windows-specific build configuration that turns off
+# Windows-incompatible features.
 #
-# Not all plugins are supported on Windows yet. This file tweaks
-# the build flags so that we can compile fluent-bit on it.
+# We try to keep this list up-to-date as a quick reference for Windows
+# users to see what is supported and what is not. If you have any feature
+# that you want to use, but is marked "no" here, please let us know on
+# GitHub issues.
 
 set(FLB_REGEX                 Yes)
+set(FLB_UTF8_ENCODER          Yes)
 set(FLB_BACKTRACE              No)
 set(FLB_LUAJIT                Yes)
 set(FLB_EXAMPLES              Yes)
 set(FLB_PARSER                Yes)
 set(FLB_TLS                   Yes)
-set(FLB_AWS                   Yes)
 set(FLB_HTTP_SERVER            No)
+set(FLB_BACKTRACE              No)
+set(FLB_LUAJIT                Yes)
+set(FLB_SIGNV4                Yes)
+set(FLB_AWS                   Yes)
+set(FLB_STREAM_PROCESSOR      Yes)
+set(FLB_RECORD_ACCESSOR       Yes)
+set(FLB_AVRO_ENCODER           No)
+set(FLB_DEBUG                  No)
 
 # INPUT plugins
 # =============
 set(FLB_IN_CPU                 No)
+set(FLB_IN_THERMAL             No)
 set(FLB_IN_DISK                No)
+set(FLB_IN_DOCKER              No)
+set(FLB_IN_DOCKER_EVENTS       No)
 set(FLB_IN_EXEC                No)
 set(FLB_IN_FORWARD            Yes)
 set(FLB_IN_HEALTH              No)
@@ -55,45 +69,45 @@ set(FLB_OUT_GELF              Yes)
 set(FLB_OUT_HTTP              Yes)
 set(FLB_OUT_INFLUXDB          Yes)
 set(FLB_OUT_NATS               No)
+set(FLB_OUT_NRLOGS            Yes)
+set(FLB_OUT_TCP               Yes)
 set(FLB_OUT_PLOT               No)
 set(FLB_OUT_FILE              Yes)
 set(FLB_OUT_TD                 No)
 set(FLB_OUT_RETRY              No)
+set(FLB_OUT_PGSQL              No)
+set(FLB_OUT_SLACK             Yes)
 set(FLB_OUT_SPLUNK            Yes)
 set(FLB_OUT_STACKDRIVER       Yes)
 set(FLB_OUT_STDOUT            Yes)
 set(FLB_OUT_LIB                No)
 set(FLB_OUT_NULL              Yes)
 set(FLB_OUT_FLOWCOUNTER       Yes)
+set(FLB_OUT_LOGDNA            Yes)
+set(FLB_OUT_LOKI              Yes)
 set(FLB_OUT_KAFKA              No)
 set(FLB_OUT_KAFKA_REST         No)
 set(FLB_OUT_CLOUDWATCH_LOGS   Yes)
-set(FLB_OUT_S3                Yes)
 set(FLB_OUT_KINESIS_FIREHOSE   No)
+set(FLB_OUT_KINESIS_STREAMS    No)
+set(FLB_OUT_S3                Yes)
+set(FLB_OUT_WEBSOCKET          No)
 
 # FILTER plugins
 # ==============
+set(FLB_FILTER_ALTER_SIZE      No)
+set(FLB_FILTER_AWS             No)
+set(FLB_FILTER_EXPECT          No)
 set(FLB_FILTER_GREP           Yes)
 set(FLB_FILTER_MODIFY         Yes)
 set(FLB_FILTER_STDOUT         Yes)
 set(FLB_FILTER_PARSER         Yes)
 set(FLB_FILTER_KUBERNETES     Yes)
+set(FLB_FILTER_REWRITE_TAG    Yes)
 set(FLB_FILTER_THROTTLE       Yes)
 set(FLB_FILTER_THROTTLE_SIZE  Yes)
 set(FLB_FILTER_NEST           Yes)
 set(FLB_FILTER_LUA            Yes)
 set(FLB_FILTER_RECORD_MODIFIER Yes)
-set(FLB_FILTER_REWRITE_TAG    Yes)
+set(FLB_FILTER_TENSORFLOW      No)
 set(FLB_FILTER_GEOIP2         Yes)
-
-# Search bison and flex executables
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  find_package(FLEX)
-  find_package(BISON)
-
-  if (NOT (${FLEX_FOUND} AND ${BISON_FOUND}))
-    message(STATUS "flex and bison not found. Disable stream_processor building.")
-    set(FLB_STREAM_PROCESSOR No)
-    set(FLB_RECORD_ACCESSOR  No)
-  endif()
-endif()
